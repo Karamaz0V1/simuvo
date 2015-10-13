@@ -7,4 +7,15 @@ IF(VISP_FOUND)
   INCLUDE(${VISP_USE_FILE})
 ENDIF(VISP_FOUND)
 
-ADD_EXECUTABLE(simuvo main.cpp)
+SET(SRC 
+    kvisp.cpp
+    Scene2D.cpp
+    main.cpp
+    )
+
+SET(HDR
+    kvisp.h
+    Scene2D.h
+    )
+
+ADD_EXECUTABLE(simuvo ${SRC} ${HDR})
