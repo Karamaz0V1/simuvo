@@ -16,12 +16,14 @@
 using std::vector;
 
 Scene2D::Scene2D() : _cameraParam(3, 3), _pi(3, 4) {
-    double f = 500;
+    double f = 300;
     _cameraParam[0][0] = f;
     _cameraParam[1][1] = f;
     _cameraParam[2][2] = 1;
     _cameraParam[0][2] = WIDTH / 2;
     _cameraParam[1][2] = HEIGHT / 2;
+
+    std::cout << _cameraParam << std::endl;
 
     _pi[0][0] = 1;
     _pi[1][1] = 1;
@@ -44,6 +46,8 @@ vpColVector Scene2D::getPointToFramePosition(int pointId) {
 }
 
 vpColVector Scene2D::getPointToFramePosition(vpColVector & vect) {
+    std::cout << "Dans le meilleur des mondes : " << _pi * (_cMs * vect) << std::endl;
+    return _cameraParam * (_pi * (_cMs * vect));
     return _cameraParam * (_pi * (_cMs.inverse() * vect));
 }
 

@@ -17,10 +17,10 @@ int main( int argc, char* argv[] )
     Scene2D s;
     s.setCameraPosition(vpHomogeneousMatrix(vpTranslationVector(0,0,1), vpThetaUVector()));
     double L = 0.5;
-    s.addPoint(vpColVector3(L,L,0));
-    s.addPoint(vpColVector3(-L,L,0));
-    s.addPoint(vpColVector3(-L,-L,0));
-    s.addPoint(vpColVector3(L,-L,0));
+    s.addPoint(vpColVector3(L,L,1));
+    s.addPoint(vpColVector3(-L,L,1));
+    s.addPoint(vpColVector3(-L,-L,1));
+    s.addPoint(vpColVector3(L,-L,1));
     s.display();
     return 0;
 }
