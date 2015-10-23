@@ -16,6 +16,6 @@ vpColVector vpColVector3(const double x, const double y, const double z) {
     return cv;
 }
 
-vpImagePoint vpColVectorToVpImagePoint(vpColVector & vect) {
+vpImagePoint vpColVectorToVpImagePoint(const vpColVector & vect) {
     return vpImagePoint(vect[0], vect[1]);
 }

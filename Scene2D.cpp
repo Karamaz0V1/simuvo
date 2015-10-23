@@ -23,8 +23,6 @@ Scene2D::Scene2D() : _cameraParam(3, 3), _pi(3, 4) {
     _cameraParam[0][2] = WIDTH / 2;
     _cameraParam[1][2] = HEIGHT / 2;
 
-    std::cout << _cameraParam << std::endl;
-
     _pi[0][0] = 1;
     _pi[1][1] = 1;
     _pi[2][2] = 1;
@@ -39,15 +37,12 @@ void Scene2D::addPoint(const vpColVector & sX) {
 }
 
 vpColVector Scene2D::getPointToFramePosition(int pointId) {
-    // TODO: test pointId
-    // TODO: test cMs
     // TODO: pull request sur visp pour const vpCV
     return getPointToFramePosition(_sXi[pointId]);
 }
 
 vpColVector Scene2D::getPointToFramePosition(vpColVector & vect) {
-    std::cout << "Dans le meilleur des mondes : " << _pi * (_cMs * vect) << std::endl;
-    return _cameraParam * (_pi * (_cMs * vect));
+    //return _cameraParam * (_pi * (_cMs * vect));
     return _cameraParam * (_pi * (_cMs.inverse() * vect));
 }
 
@@ -57,10 +52,8 @@ void Scene2D::display() {
     vpDisplay::display(image);
 
     for (vector<vpColVector>::iterator it = _sXi.begin(); it != _sXi.end(); it++) {
-        // TODO vpImagePoint <- vpColVector
         vpColVector tmp = getPointToFramePosition(*it);
-        vpImagePoint ip = vpColVectorToVpImagePoint(tmp);
-        std::cout << ip << std::endl;
+        vpImagePoint ip(tmp[0],tmp[1]);
         vpDisplay::displayCross(image, ip, 5, vpColor::green);
     }
 
