@@ -20,11 +20,14 @@ class Scene2D {
         void setCameraPosition(const vpHomogeneousMatrix & cMs);
         void addPoint(const vpColVector & sX);
         vpColVector getPointToFramePosition(int pointId = 0);
-        void display() const;
+        vpColVector getPointToFramePosition(vpColVector & vect);
+        void display();
 
     private:
         vpHomogeneousMatrix _cMs;
         std::vector<vpColVector> _sXi;
+        vpMatrix _cameraParam;
+        vpMatrix _pi;
 
 };
 

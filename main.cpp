@@ -21,5 +21,6 @@ int main( int argc, char* argv[] )
     s.addPoint(vpColVector3(-L,L,0));
     s.addPoint(vpColVector3(-L,-L,0));
     s.addPoint(vpColVector3(L,-L,0));
+    s.display();
     return 0;
 }
