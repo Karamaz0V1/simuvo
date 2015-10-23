@@ -15,7 +15,8 @@
 int main( int argc, char* argv[] )
 {
     Scene2D s;
-    s.setCameraPosition(vpHomogeneousMatrix(vpTranslationVector(0,0,1), vpThetaUVector()));
+    s.setCameraPosition(vpHomogeneousMatrix(0, 0, 100, 0, 0, 0));
+    //s.setCameraPosition(vpHomogeneousMatrix(vpTranslationVector(0,0,10), vpThetaUVector()));
     double L = 0.5;
     s.addPoint(vpColVector3(L,L,1));
     s.addPoint(vpColVector3(-L,L,1));
