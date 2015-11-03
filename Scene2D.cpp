@@ -36,6 +36,10 @@ void Scene2D::addPoint(const vpColVector & sX) {
     _sXi.push_back(sX);
 }
 
+void Scene2D::addDesiredPoint(const vpColVector & sXe) {
+    _sXie.push_back(sXe);
+}
+
 vpColVector Scene2D::getPointToFramePosition(int pointId) {
     // TODO: pull request sur visp pour const vpCV
     return getPointToFramePosition(_sXi[pointId]);
@@ -59,4 +63,18 @@ void Scene2D::display() {
 
     vpDisplay::flush(image);
     vpDisplay::getClick(image);
+}
+
+void Scene2D::command() {
+    vpColVector s(8);
+    vpColVector se(8);
+
+    for (int i=0; i<4; i++) {
+        // TODO: need /[2] ?
+        s[2*i] = _sXi[i][0];
+        s[2*i+1] = _sXi[i][1];
+        se[2*i] = _sXie[i][0];
+        se[2*i+1] = _sXie[i][1];
+    }
+
 }
