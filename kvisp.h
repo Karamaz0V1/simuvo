@@ -12,6 +12,7 @@
 #include <visp/vpImagePoint.h>
 
 vpColVector vpColVector3(const double x, const double y, const double z);
+vpColVector vpColVector4(const double x, const double y, const double z, const double w);
 vpImagePoint vpColVectorToVpImagePoint(vpColVector & vect);
 
 

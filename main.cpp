@@ -15,13 +15,14 @@
 int main( int argc, char* argv[] )
 {
     Scene2D s;
-    s.setCameraPosition(vpHomogeneousMatrix(0, 0, 100, 0, 0, 0));
+    s.setCameraPosition(vpHomogeneousMatrix(3, 0, 10, 0, 0, 0));
     //s.setCameraPosition(vpHomogeneousMatrix(vpTranslationVector(0,0,10), vpThetaUVector()));
     double L = 0.5;
-    s.addPoint(vpColVector3(L,L,1));
-    s.addPoint(vpColVector3(-L,L,1));
-    s.addPoint(vpColVector3(-L,-L,1));
-    s.addPoint(vpColVector3(L,-L,1));
+    s.addPoint(vpColVector4(L,L,0,1));
+    s.addPoint(vpColVector4(-L,L,0,1));
+    s.addPoint(vpColVector4(-L,-L,0,1));
+    s.addPoint(vpColVector4(L,-L,0,1));
+    s.addPoint(vpColVector4(2*L,L,0,1));
     s.display();
     return 0;
 }

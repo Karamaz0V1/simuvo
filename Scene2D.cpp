@@ -30,7 +30,6 @@ Scene2D::Scene2D() : _cameraParam(3, 3), _pi(3, 4) {
 Scene2D::~Scene2D() {}
 void Scene2D::setCameraPosition(const vpHomogeneousMatrix & cMs) {
     _cMs = cMs;
-    std::cout << _cMs;
 }
 
 void Scene2D::addPoint(const vpColVector & sX) {
@@ -43,10 +42,8 @@ vpColVector Scene2D::getPointToFramePosition(int pointId) {
 }
 
 vpColVector Scene2D::getPointToFramePosition(vpColVector & vect) {
-    std::cout << "test1" << std::endl << (_cMs) ;
-    std::cout << "test" << std::endl << ((vpMatrix)_cMs * vect) ;
     return _cameraParam * (_pi * (_cMs * vect));
-    //return _cameraParam * (_pi * (_cMs.inverse() * vect));
+    return _cameraParam * (_pi * (_cMs.inverse() * vect));
 }
 
 void Scene2D::display() {
@@ -56,7 +53,7 @@ void Scene2D::display() {
 
     for (vector<vpColVector>::iterator it = _sXi.begin(); it != _sXi.end(); it++) {
         vpColVector tmp = getPointToFramePosition(*it);
-        vpImagePoint ip(tmp[0] / tmp[2],tmp[1] / tmp[2]);
+        vpImagePoint ip(tmp[1] / tmp[2],tmp[0] / tmp[2]);
         vpDisplay::displayCross(image, ip, 5, vpColor::green);
     }
 
