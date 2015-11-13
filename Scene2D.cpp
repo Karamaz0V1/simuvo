@@ -15,6 +15,8 @@
 #define HEIGHT 512
 
 using std::vector;
+using std::cout;
+using std::endl;
 
 Scene2D::Scene2D() : _cameraParam(3, 3), _pi(3, 4) {
     double f = 300;
@@ -31,6 +33,14 @@ Scene2D::Scene2D() : _cameraParam(3, 3), _pi(3, 4) {
 Scene2D::~Scene2D() {}
 void Scene2D::setCameraPosition(const vpHomogeneousMatrix & cMs) {
     _cMs = cMs;
+}
+
+void Scene2D::setDesiredCameraPosition(const vpHomogeneousMatrix & cMs) {
+    for (vector<vpColVector>::iterator it = _sXi.begin(); it != _sXi.end(); it++) {
+        auto tmp = cMs * (*it);
+        addDesiredPoint(tmp);
+        std::cout << "Point desiré: " << tmp.t() << endl;
+    }
 }
 
 void Scene2D::addPoint(const vpColVector & sX) {
@@ -67,12 +77,28 @@ void Scene2D::display() {
 }
 
 void Scene2D::command() {
-    for (int i = 0; i < 100; i++) {
+    double dt = 0.01;
+    vpImage<vpRGBa> image(WIDTH, HEIGHT);
+    vpDisplayX disp(image, 10, 10, "simuvo");
+    vpDisplay::display(image);
+
+    for (int i = 0; i < 1000000; i++) {
         vpColVector v = computeV();
-        double dt = 0.1;
+        std::cout << "Vitesses : " <<  endl << v << endl;
         _cMs = vpExponentialMap::direct(v, dt).inverse() * _cMs;
-        display();
+
+        // DISPLAY
+        for (vector<vpColVector>::iterator it = _sXi.begin(); it != _sXi.end(); it++) {
+            vpColVector tmp = getPointToFramePosition(*it);
+            vpImagePoint ip(tmp[1] / tmp[2],tmp[0] / tmp[2]);
+            if (i == 0)
+                vpDisplay::displayCross(image, ip, 5, vpColor::green);
+            else
+                vpDisplay::displayCross(image, ip, 5, vpColor::blue);
+        }
+        vpDisplay::flush(image);
     }
+    vpDisplay::getClick(image);
 }
 
 vpColVector Scene2D::computeV() {
@@ -81,15 +107,21 @@ vpColVector Scene2D::computeV() {
 
     // s & s*
     for (int i = 0; i < 4; i++) {
-        // TODO: need /[2] ?
-        s[2*i] = _sXi[i][0];
-        s[2*i+1] = _sXi[i][1];
-        se[2*i] = _sXie[i][0];
-        se[2*i+1] = _sXie[i][1];
+        // TODO: need /[2]
+        vpColVector S = _cMs * _sXi[i];
+        s[2*i] = S[0] / S[2];
+        s[2*i+1] = S[1] / S[2];
+        se[2*i] = _sXie[i][0] / _sXie[i][2];
+        se[2*i+1] = _sXie[i][1] / _sXie[i][2];
+        cout << "sXi:  " << _sXi[i].t() << endl;
+        cout << "sXie: " << _sXie[i].t() << endl;
     }
 
+    cout << "s: " << s.t() << endl;
+    cout << "se: " << se.t() << endl;
     // e
     vpColVector e = s - se;
+    cout << "ERREUR: " << e.t() << endl;
 
     // L
     vpMatrix L(8, 6);

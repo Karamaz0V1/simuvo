@@ -18,6 +18,7 @@ class Scene2D {
         Scene2D();
         ~Scene2D();
         void setCameraPosition(const vpHomogeneousMatrix & cMs);
+        void setDesiredCameraPosition(const vpHomogeneousMatrix & cMs);
         void addPoint(const vpColVector & sX);
         void addDesiredPoint(const vpColVector & sXe);
         vpColVector getPointToFramePosition(int pointId = 0);
