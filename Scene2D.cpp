@@ -69,12 +69,37 @@ void Scene2D::command() {
     vpColVector s(8);
     vpColVector se(8);
 
-    for (int i=0; i<4; i++) {
+    // s & s*
+    for (int i = 0; i < 4; i++) {
         // TODO: need /[2] ?
         s[2*i] = _sXi[i][0];
         s[2*i+1] = _sXi[i][1];
         se[2*i] = _sXie[i][0];
         se[2*i+1] = _sXie[i][1];
+    }
+
+    // e
+    vpColVector e = s - se;
+
+    // L
+    vpMatrix L(8, 6);
+    for (int i = 0; i < 4; i++) {
+        auto x = _sXi[i][0];
+        auto y = _sXi[i][1];
+        auto z = _sXi[i][2];
+        L[2*i][0]   = -1 / z;
+        L[2*i+1][0] = 0;
+        L[2*i][1]   = 0;
+        L[2*i+1][1] = -1/ z;
+        L[2*i][2]   = x / z;
+        L[2*i+1][2] = y / z;
+        L[2*i][3]   = x * z;
+        L[2*i+1][3] = 1 + y*y;
+        L[2*i][4]   = -(1 + x*x);
+        L[2*i+1][4] = -x * y;
+        L[2*i][5]   = y;
+        L[2*i+1][5] = -x;
+
     }
 
 }
