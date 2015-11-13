@@ -32,6 +32,9 @@ class Scene2D {
         vpMatrix _cameraParam;
         vpMatrix _pi;
 
+    private:
+        vpColVector computeV();
+
 };
 
 #endif /* __SCENE2D_H__ */

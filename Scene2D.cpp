@@ -10,6 +10,7 @@
 #include "kvisp.h"
 #include <visp/vpImage.h>
 #include <visp/vpDisplayX.h>
+#include <visp/vpExponentialMap.h>
 #define WIDTH 512
 #define HEIGHT 512
 
@@ -66,6 +67,15 @@ void Scene2D::display() {
 }
 
 void Scene2D::command() {
+    for (int i = 0; i < 100; i++) {
+        vpColVector v = computeV();
+        double dt = 0.1;
+        _cMs = vpExponentialMap::direct(v, dt).inverse() * _cMs;
+        display();
+    }
+}
+
+vpColVector Scene2D::computeV() {
     vpColVector s(8);
     vpColVector se(8);
 
@@ -84,9 +94,10 @@ void Scene2D::command() {
     // L
     vpMatrix L(8, 6);
     for (int i = 0; i < 4; i++) {
-        auto x = _sXi[i][0];
-        auto y = _sXi[i][1];
-        auto z = _sXi[i][2];
+        vpColVector C = _cMs * _sXi[i];
+        auto x = C[0] / C[2];
+        auto y = C[1] / C[2];
+        auto z = C[2];
         L[2*i][0]   = -1 / z;
         L[2*i+1][0] = 0;
         L[2*i][1]   = 0;
@@ -99,7 +110,13 @@ void Scene2D::command() {
         L[2*i+1][4] = -x * y;
         L[2*i][5]   = y;
         L[2*i+1][5] = -x;
-
     }
 
+    // L+
+    L = L.pseudoInverse();
+
+    // v
+    vpColVector v = -L * e;
+
+    return v;
 }
