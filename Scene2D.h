@@ -11,6 +11,7 @@
 #include <visp/vpMatrix.h>
 #include <visp/vpColVector.h>
 #include <visp/vpHomogeneousMatrix.h>
+#include <visp/vpImage.h>
 #include <vector>
 
 class Scene2D {
@@ -23,9 +24,10 @@ class Scene2D {
         void addDesiredPoint(const vpColVector & sXe);
         vpColVector getPointToFramePosition(int pointId = 0);
         vpColVector getPointToFramePosition(vpColVector & vect);
+        void displayPt(const vpImage<vpRGBa> & image, const std::vector<vpColVector> & points);
+        double ptError(const vpColVector & p1, const vpColVector & p2) const;
         void display();
         void command();
-        double ptError(const vpColVector & p1, const vpColVector & p2) const;
 
     private:
         vpHomogeneousMatrix _cMs;

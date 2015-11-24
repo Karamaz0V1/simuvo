@@ -80,13 +80,25 @@ double Scene2D::ptError(const vpColVector & p1, const vpColVector & p2) const {
     return sqrt((p1[0]-p2[0]) * (p1[0]-p2[0]) + (p1[1]-p2[1]) * (p1[1]-p2[1]) + (p1[2]-p2[2]) * (p1[2]-p2[2]));
 }
 
+void Scene2D::displayPt(const vpImage<vpRGBa> & image, const vector<vpColVector> & points) {
+    for (vector<vpColVector>::iterator it = _sXi.begin(); it != _sXi.end(); it++) {
+        vpColVector tmp = getPointToFramePosition(*it);
+        vpImagePoint ip(tmp[1] / tmp[2],tmp[0] / tmp[2]);
+        vpDisplay::displayCross(image, ip, 5, vpColor::blue);
+    }
+}
+
 void Scene2D::command() {
-    double dt = 0.01;
+    double dt = 0.001;
     vpImage<vpRGBa> image(WIDTH, HEIGHT);
     vpDisplayX disp(image, 10, 10, "simuvo");
     vpDisplay::display(image);
 
-    for (int i = 0; i < 10; i++) {
+    displayPt(image, _sXie);
+    vpDisplay::flush(image);
+    vpDisplay::getClick(image);
+
+    for (int i = 0; i < 10000; i++) {
         vpColVector v = computeV();
         std::cout << "Vitesses : " <<  v.t() << endl;
 
@@ -107,7 +119,7 @@ void Scene2D::command() {
             if (i == 0)
                 vpDisplay::displayCross(image, ip, 5, vpColor::green);
             else
-                vpDisplay::displayCross(image, ip, 5, vpColor(255,i+127,i));
+                vpDisplay::displayCross(image, ip, 5, vpColor(0,255,i/40));
         }
         vpDisplay::flush(image);
     }
