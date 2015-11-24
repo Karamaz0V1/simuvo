@@ -25,6 +25,7 @@ class Scene2D {
         vpColVector getPointToFramePosition(vpColVector & vect);
         void display();
         void command();
+        double ptError(const vpColVector & p1, const vpColVector & p2) const;
 
     private:
         vpHomogeneousMatrix _cMs;
@@ -34,7 +35,7 @@ class Scene2D {
         vpMatrix _pi;
 
     private:
-        vpColVector computeV();
+        virtual vpColVector computeV();
 
 };
 

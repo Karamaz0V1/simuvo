@@ -11,12 +11,14 @@ ENDIF(VISP_FOUND)
 SET(SRC 
     kvisp.cpp
     Scene2D.cpp
+    Scene3D.cpp
     main.cpp
     )
 
 SET(HDR
     kvisp.h
     Scene2D.h
+    Scene3D.h
     )
 
 ADD_EXECUTABLE(simuvo ${SRC} ${HDR})

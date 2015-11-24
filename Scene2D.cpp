@@ -76,25 +76,38 @@ void Scene2D::display() {
     vpDisplay::getClick(image);
 }
 
+double Scene2D::ptError(const vpColVector & p1, const vpColVector & p2) const {
+    return sqrt((p1[0]-p2[0]) * (p1[0]-p2[0]) + (p1[1]-p2[1]) * (p1[1]-p2[1]) + (p1[2]-p2[2]) * (p1[2]-p2[2]));
+}
+
 void Scene2D::command() {
     double dt = 0.01;
     vpImage<vpRGBa> image(WIDTH, HEIGHT);
     vpDisplayX disp(image, 10, 10, "simuvo");
     vpDisplay::display(image);
 
-    for (int i = 0; i < 1000000; i++) {
+    for (int i = 0; i < 10; i++) {
         vpColVector v = computeV();
-        std::cout << "Vitesses : " <<  endl << v << endl;
+        std::cout << "Vitesses : " <<  v.t() << endl;
+
+        // Is that normal v.sum() isn't working ?
+        //v.sum();
+
         _cMs = vpExponentialMap::direct(v, dt).inverse() * _cMs;
 
         // DISPLAY
         for (vector<vpColVector>::iterator it = _sXi.begin(); it != _sXi.end(); it++) {
             vpColVector tmp = getPointToFramePosition(*it);
+            cout << "P1: " << (*it).t() << endl;
+            cout << "P2: " << (_cMs * (*it)).t() << endl;
+            cout << "Error: " << ptError(tmp, *it) << endl;
+            // Compare sXi & sXie 
+
             vpImagePoint ip(tmp[1] / tmp[2],tmp[0] / tmp[2]);
             if (i == 0)
                 vpDisplay::displayCross(image, ip, 5, vpColor::green);
             else
-                vpDisplay::displayCross(image, ip, 5, vpColor::blue);
+                vpDisplay::displayCross(image, ip, 5, vpColor(255,i+127,i));
         }
         vpDisplay::flush(image);
     }
@@ -113,15 +126,15 @@ vpColVector Scene2D::computeV() {
         s[2*i+1] = S[1] / S[2];
         se[2*i] = _sXie[i][0] / _sXie[i][2];
         se[2*i+1] = _sXie[i][1] / _sXie[i][2];
-        cout << "sXi:  " << _sXi[i].t() << endl;
-        cout << "sXie: " << _sXie[i].t() << endl;
+        //cout << "sXi:  " << _sXi[i].t() << endl;
+        //cout << "sXie: " << _sXie[i].t() << endl;
     }
 
-    cout << "s: " << s.t() << endl;
-    cout << "se: " << se.t() << endl;
+    //cout << "s: " << s.t() << endl;
+    //cout << "se: " << se.t() << endl;
     // e
     vpColVector e = s - se;
-    cout << "ERREUR: " << e.t() << endl;
+    //cout << "ERREUR: " << e.t() << endl;
 
     // L
     vpMatrix L(8, 6);

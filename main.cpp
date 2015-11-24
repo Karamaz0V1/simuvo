@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include "kvisp.h"
-#include "Scene2D.h"
+#include "Scene3D.h"
 #include <visp/vpTranslationVector.h>
 #include <visp/vpThetaUVector.h>
 
@@ -23,7 +23,7 @@ int main( int argc, char* argv[] )
     s.addPoint(vpColVector4(-L,-L,0,1));
     s.addPoint(vpColVector4(L,-L,0,1));
     s.display();
-    s.setDesiredCameraPosition(vpHomogeneousMatrix(0, 0, 3, 1, 0, 0));
+    s.setDesiredCameraPosition(vpHomogeneousMatrix(0, 0, 3, 0, 0, 0));
     s.command();
     //s.display();
     return 0;
